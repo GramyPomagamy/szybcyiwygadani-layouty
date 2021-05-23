@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+	<style>
+		.monospace {
+			font-family: monospace;
+		}
+		#timeinput {
+			display: inline-block;
+		}
+	</style>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/dark.css">
+</head>
+<body>
+	<div id="names">
+		<h2>Nicki</h2>
+		<h4>Nick 1</h4>
+		<input type="text" id="nick1" placeholder="Nick 1">
+		<input type="text" id="twitch1" placeholder="Twitch 1">
+		<h4>Nick 2</h4>
+		<input type="text" id="nick2" placeholder="Nick 2">
+		<input type="text" id="twitch2" placeholder="Twitch 2">
+		<h4>Nick 3</h4>
+		<input type="text" id="nick3" placeholder="Nick 3">
+		<input type="text" id="twitch3" placeholder="Twitch 3">
+		<button onclick="updateNames()">Zaktualizuj nazwy</button> 
+	</div>
+	<div id="countdown">
+		<h2>Odliczanie</h2>
+		<br>
+		<div id="timeinput">
+			<input type="text" id="time" value="10:00">
+			<button id="startCountdown" onclick="startCountdown()">Zacznij odliczanie</button> 
+			<button id="stopCountdown" onclick="stopCountdown()">Zatrzymaj odliczanie</button> 
+		</div>
+	</div>
+	<div id="music">
+		<h2>Muzyka</h2>
+		<input type="text" id="filepath" disabled placeholder="Ścieżka do pliku z nazwą piosenki">
+		<label for="filepath" style="font-size: 16px;">Ścieżka jest odczytywana z pliku konfiguracyjnego</label>
+	</div>
+	<script>
+		const name_replicant = nodecg.Replicant('podcastNames');
+		const time_replicant = nodecg.Replicant('countdown', {persistent: false});
+		const timerrunning_replicant = nodecg.Replicant('countdownRunning', {persistent: false});
+		const nick1_element = document.querySelector('#nick1');
+		const nick2_element = document.querySelector('#nick2');
+		const nick3_element = document.querySelector('#nick3');
+		const twitch1_element = document.querySelector('#twitch1');
+		const twitch2_element = document.querySelector('#twitch2');
+		const twitch3_element = document.querySelector('#twitch3');
+		const time_element = document.querySelector('#time');
+		const startCountdownBtn = document.querySelector('#startCountdown');
+		const stopCountdownBtn = document.querySelector('#stopCountdown');
+
+		function updateNames() {
+			name_replicant.value = 
+			{
+				name1: {
+					nick: nick1_element.value,
+					twitch: twitch1_element.value
+				},
+				name2: {
+					nick: nick2_element.value,
+					twitch: twitch2_element.value
+				},
+				name3: {
+					nick: nick3_element.value,
+					twitch: twitch3_element.value
+				},
+			}
+		}
+		function startCountdown() {
+			let time = time_element.value;
+			nodecg.sendMessage("startCountdown", time);
+		}
+
+		function stopCountdown() {
+			nodecg.sendMessage("stopCountdown");
+		}
+
+		name_replicant.on('change', newVal => {
+			nick1_element.value = newVal.name1.nick;
+			twitch1_element.value = newVal.name1.twitch;
+			nick2_element.value = newVal.name2.nick;
+			twitch2_element.value = newVal.name2.twitch;
+			nick3_element.value = newVal.name3.nick;
+			twitch3_element.value = newVal.name3.twitch;
+		});
+
+		time_replicant.on('change', newVal => {
+			document.querySelector('#time').value = newVal.formatted;
+
+		})
+
+		timerrunning_replicant.on('change', newVal => {
+			if (newVal) {
+				time_element.disabled = true;
+				startCountdownBtn.disabled = true;
+				stopCountdownBtn.disabled = false;
+			}
+			else if (!newVal) {
+				time_element.disabled = false;
+				startCountdownBtn.disabled = false;
+				stopCountdownBtn.disabled = true;
+			}
+		})
+
+		document.querySelector('#filepath').value = nodecg.bundleConfig.musicTitlePath;
+		document.querySelector('#filepath').title = nodecg.bundleConfig.musicTitlePath;
+
+	</script>
+</body>
+</html>

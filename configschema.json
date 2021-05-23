@@ -1,0 +1,15 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"additionalProperties": false,
+
+	"properties": {
+		"musicTitlePath": {
+			"type": "string",
+			"description": "Path to a text file containing the current song name.",
+			"default": "C:/foobar.txt"
+		}
+	},
+
+	"required": ["musicTitlePath"]
+}

@@ -1,0 +1,52 @@
+{
+  "name": "szybcyiwygadani-layouty",
+  "version": "0.0.0",
+  "description": "Layouty podcastu \"Szybcy i Wygadani\".",
+  "homepage": "https://gsps.pl",
+  "author": {
+    "name": "GramyPomagamy",
+    "email": "kontakt.gsps@gmail.com",
+    "url": "https://gsps.pl"
+  },
+  "keywords": [
+    "",
+    "nodecg-bundle"
+  ],
+  "nodecg": {
+    "compatibleRange": "^1.1.1",
+    "dashboardPanels": [
+      {
+        "name": "names",
+        "title": "Podcast",
+        "width": 3,
+        "file": "names.html",
+        "headerColor": "#525F78"
+      }
+    ],
+    "graphics": [
+      {
+        "file": "main.html",
+        "width": 1920,
+        "height": 1080
+      },
+      {
+        "file": "main_2p.html",
+        "width": 1920,
+        "height": 1080
+      },
+      {
+        "file": "countdown.html",
+        "width": 1920,
+        "height": 1080
+      }
+    ]
+  },
+  "repository": "https://github.com/nodecg/nodecg.git",
+  "private": true,
+  "dependencies": {
+    "events": "^3.3.0",
+    "material-components-web": "^11.0.0",
+    "milliseconds": "^1.0.3",
+    "parse-ms": "^2.1.0"
+  }
+}
